@@ -1,33 +1,32 @@
 #!/bin/bash -x
 
-sudo curl -o /tmp/provisioningVars ${FILE_SERVER}/pod_${POD}_variables.sh
+curl -o /tmp/provisioningVars ${FILE_SERVER}/pod_${POD}_variables.sh
 . /tmp/provisioningVars.sh
 
-sudo su -c "cat <<EOF > /etc/yum.repos.d/MariaDB.repo
+cat <<EOF > /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.1/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
-"
 
-sudo rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-sudo groupadd -g 250 -r mysql
-sudo useradd -u 250 -r -g mysql mysql
-sudo yum update -y
-sudo yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld nmap
-sudo yum install expect -y
-sudo yum clean all
+rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+groupadd -g 250 -r mysql
+useradd -u 250 -r -g mysql mysql
+yum update -y
+yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld nmap
+yum install expect -y
+yum clean all
 
-sudo systemctl enable mariadb
-sudo systemctl start mariadb
+systemctl enable mariadb
+systemctl start mariadb
 
 # mysql secure installation
 CURRENT_MYSQL_PASSWORD=''
 NEW_MYSQL_PASSWORD="${GALERA_DB_ROOT_PWD}"
 
-SECURE_MYSQL=$(sudo expect -c "
+SECURE_MYSQL=$(expect -c "
 
 set timeout 3
 spawn mysql_secure_installation
@@ -72,15 +71,15 @@ FLUSH PRIVILEGES;
 EOF
 
 
-sudo systemctl stop mariadb
-sudo systemctl enable firewalld
-sudo systemctl start firewalld
-sudo firewall-cmd --add-port=4567/tcp --permanent
-sudo firewall-cmd --add-port=4568/tcp --permanent
-sudo firewall-cmd --add-port=4444/tcp --permanent
-sudo firewall-cmd --add-port=3306/tcp --permanent
-sudo firewall-cmd --add-port=9200/tcp --permanent
-sudo firewall-cmd --reload
+systemctl stop mariadb
+systemctl enable firewalld
+systemctl start firewalld
+firewall-cmd --add-port=4567/tcp --permanent
+firewall-cmd --add-port=4568/tcp --permanent
+firewall-cmd --add-port=4444/tcp --permanent
+firewall-cmd --add-port=3306/tcp --permanent
+firewall-cmd --add-port=9200/tcp --permanent
+firewall-cmd --reload
 
 temp_ifs=${IFS}
 IFS=','
@@ -108,7 +107,7 @@ IFS=${temp_ifs}
 
 
 # MYSQL Config Settings
-sudo su -c "cat << EOF > /etc/my.cnf.d/server.cnf
+cat << EOF > /etc/my.cnf.d/server.cnf
 [mysql]
 
 # This config is tuned for a 4xCore, 8GB Ram DB Host
@@ -197,19 +196,18 @@ wsrep_node_name                = '${NODE_HOSTNAME}'
 # MYISAM REPLICATION SUPPORT #
 wsrep_replicate_myisam         = ON
 EOF
-"
 
 
 if [ "${master}" == "${NODE_HOSTNAME}" ]; then
     # I'm the master
     echo "Master"
     echo "Initializing master..."
-    sudo galera_new_cluster
+    galera_new_cluster
     #Download and restore old database
     echo "Downloading SQL file and restoring database."
     curl -o /tmp/siwapp.sql ${FILE_SERVER}/siwapp.sql
-    sudo su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' < /tmp/siwapp.sql"
-    sudo su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' -e 'CREATE USER haproxy; FLUSH PRIVILEGES;'"
+    mysql -u root -p'${GALERA_DB_ROOT_PWD}' < /tmp/siwapp.sql
+    mysql -u root -p'${GALERA_DB_ROOT_PWD}' -e 'CREATE USER haproxy; FLUSH PRIVILEGES;'
 
 else
     echo  "Waiting for master node to be initialized..."
@@ -233,6 +231,6 @@ else
         exit 1
     else
         echo "starting slave"
-        sudo systemctl start mariadb
+        systemctl start mariadb
     fi
 fi
