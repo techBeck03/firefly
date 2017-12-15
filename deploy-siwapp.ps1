@@ -7,7 +7,9 @@ Param(
 	[Parameter(Mandatory=$True)]
     [string]$pwd,
     [Parameter(Mandatory=$True)]
-    [string]$csv
+    [string]$csv,
+    [Parameter(Mandatory=$True)]
+    [string]$rootPassword
 )
 
 # Global Variables
