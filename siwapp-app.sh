@@ -2,7 +2,7 @@
 curl -o /tmp/provisioningVars.sh ${FILE_SERVER}/pod_${POD}_variables.sh
 . /tmp/provisioningVars.sh
 
-app "Starting app install script"
+echo "Starting app install script"
 yum -y update
 yum -y install git httpd php php-mysql php-xml php-mbstring
 yum clean all
