@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-curl -o /tmp/provisioningVars ${FILE_SERVER}/pod_${POD}_variables.sh
+curl -o /tmp/provisioningVars.sh ${FILE_SERVER}/pod_${POD}_variables.sh
 . /tmp/provisioningVars.sh
 
 su -c "cat <<EOF > /etc/yum.repos.d/MariaDB.repo

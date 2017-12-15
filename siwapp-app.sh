@@ -1,5 +1,5 @@
 #!/bin/bash -x
-curl -o /tmp/provisioningVars ${FILE_SERVER}/pod_${POD}_variables.sh
+curl -o /tmp/provisioningVars.sh ${FILE_SERVER}/pod_${POD}_variables.sh
 . /tmp/provisioningVars.sh
 
 app "Starting app install script"
