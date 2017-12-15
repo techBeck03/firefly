@@ -61,5 +61,3 @@ echo "Restarting http services"
 systemctl enable httpd
 systemctl start httpd
 echo "App install script complete"
-
-mv ~/cliqr.repo /etc/yum.repos.d/
