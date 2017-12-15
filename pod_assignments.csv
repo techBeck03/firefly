@@ -1,0 +1,10 @@
+VMNAME,IP,HOSTNAME,POD,APP_TIER
+cent-1,192.168.1.1,haproxy-app-pod-1,1,haproxy_app
+cent-2,192.168.1.2,app-1-pod-1,1,app
+cent-3,192.168.1.3,app-2-pod-1,1,app
+cent-4,192.168.1.4,app-3-pod-1,1,app
+cent-5,192.168.1.5,haproxy-db-pod-1,1,haproxy_app
+cent-6,192.168.1.6,db-1-pod-1,1,db
+cent-7,192.168.1.7,db-2-pod-1,1,db
+cent-8,192.168.1.8,db-3-pod-1,1,db
+cent-9,192.168.1.9,load-sim-pod-1,1,load_sim
