@@ -8,7 +8,7 @@ yum -y update
 yum install -y haproxy
 
 echo "Configuring haproxy"
-echo "
+su -c 'echo "
 #---------------------------------------------------------------------
 # Siwapp App Server Backend
 #---------------------------------------------------------------------
@@ -17,7 +17,7 @@ balance roundrobin
 mode tcp
 option tcpka
 option mysql-check user haproxy
-" >> /etc/haproxy/haproxy.cfg
+" >> /etc/haproxy/haproxy.cfg'
 
 # Set internal seperator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
@@ -29,8 +29,8 @@ echo "Creating haproxy config files"
 # Iterate through list of hosts to add hosts and corresponding IPs to haproxy config file.
 host_index=0
 for host in $DB_TIER_HOSTNAMES ; do
-    echo 'server ${host} ${ipArr[${host_index}]}:3306 check inter 5s' >> /etc/haproxy/haproxy.cfg
-    echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts
+    su -c "echo 'server ${host} ${ipArr[${host_index}]}:3306 check inter 5s' >> /etc/haproxy/haproxy.cfg"
+    su -c "echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts"
     let host_index=${host_index}+1
 done
 # Set internal separator back to original.

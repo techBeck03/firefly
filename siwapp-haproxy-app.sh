@@ -7,7 +7,7 @@ yum -y update
 yum install -y haproxy
 
 echo "Configuring haproxy"
-echo "
+su -c 'echo "
 #---------------------------------------------------------------------
 # http frontend
 #---------------------------------------------------------------------
@@ -21,7 +21,7 @@ frontend  http_in
 backend siwapp_apps
 	balance roundrobin
 	cookie SERVERID insert indirect nocache
-" >> /etc/haproxy/haproxy.cfg
+" >> /etc/haproxy/haproxy.cfg'
 
 # Set internal separator to ',' since they're comma-delimited lists.
 temp_ifs=${IFS}
@@ -32,8 +32,8 @@ echo "Creating haproxy config files"
 # Iterate through list of hosts to add hosts and corresponding IPs to haproxy config file.
 host_index=0
 for host in $APP_TIER_HOSTNAMES ; do
-    echo 'server ${host} ${ipArr[${host_index}]}:8081 check cookie ${host} inter 5s' >> /etc/haproxy/haproxy.cfg
-    echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts
+    su -c "echo 'server ${host} ${ipArr[${host_index}]}:8081 check cookie ${host} inter 5s' >> /etc/haproxy/haproxy.cfg"
+    su -c "echo '${ipArr[${host_index}]} ${host}' >> /etc/hosts"
     let host_index=${host_index}+1
 done
 # Set internal separator back to original.

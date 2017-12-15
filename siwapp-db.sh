@@ -3,13 +3,14 @@
 curl -o /tmp/provisioningVars ${FILE_SERVER}/pod_${POD}_variables.sh
 . /tmp/provisioningVars.sh
 
-cat <<EOF > /etc/yum.repos.d/MariaDB.repo
+su -c "cat <<EOF > /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.1/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
+"
 
 rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 groupadd -g 250 -r mysql
@@ -107,7 +108,7 @@ IFS=${temp_ifs}
 
 
 # MYSQL Config Settings
-cat << EOF > /etc/my.cnf.d/server.cnf
+su -c "cat << EOF > /etc/my.cnf.d/server.cnf
 [mysql]
 
 # This config is tuned for a 4xCore, 8GB Ram DB Host
@@ -196,7 +197,7 @@ wsrep_node_name                = '${NODE_HOSTNAME}'
 # MYISAM REPLICATION SUPPORT #
 wsrep_replicate_myisam         = ON
 EOF
-
+"
 
 if [ "${master}" == "${NODE_HOSTNAME}" ]; then
     # I'm the master
@@ -206,8 +207,8 @@ if [ "${master}" == "${NODE_HOSTNAME}" ]; then
     #Download and restore old database
     echo "Downloading SQL file and restoring database."
     curl -o /tmp/siwapp.sql ${FILE_SERVER}/siwapp.sql
-    mysql -u root -p'${GALERA_DB_ROOT_PWD}' < /tmp/siwapp.sql
-    mysql -u root -p'${GALERA_DB_ROOT_PWD}' -e 'CREATE USER haproxy; FLUSH PRIVILEGES;'
+    su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' < /tmp/siwapp.sql"
+    su -c "mysql -u root -p'${GALERA_DB_ROOT_PWD}' -e 'CREATE USER haproxy; FLUSH PRIVILEGES;'"
 
 else
     echo  "Waiting for master node to be initialized..."
