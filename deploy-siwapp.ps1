@@ -13,7 +13,7 @@ Param(
 # Global Variables
 $FILE_SERVER = "https://something.com"
 $APP_TIERS = @{}
-$APP_TIERS."HAPROXY_APP" = "haproxy-app.sh"
+$APP_TIERS."HAPROXY_APP" = "siwapp-haproxy-app.sh"
 $APP_TIERS."APP" = "siwapp-app.sh"
 $APP_TIERS."HAPROXY_DB" = "siwapp-haproxy-db.sh"
 $APP_TIERS."DB" = "siwapp-db.sh"
