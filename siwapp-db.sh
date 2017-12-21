@@ -88,12 +88,11 @@ dbHosts=(${DB_TIER_HOSTNAMES}) # Array of nodes in my tier.
 dbIps=(${DB_TIER_IPS}) # Array of IPs in my tier.
 master=${dbHosts[0]} # Let the first node in the service tier be the master.
 master_addr=${dbIps[0]} # Let the first node in the service tier be the master.
-NODE_HOSTNAME=$(hostname)
 
 # Iterate through list of hosts to find this hosts's index in the array for later use.
 host_index=0
 for host in $DB_TIER_HOSTNAMES ; do
-    if [ ${host} = ${NODE_HOSTNAME} ]; then
+    if [ ${host} = ${HOSTNAME} ]; then
         # INDEX for this host is current position in array.
         echo "Index: ${host_index}"
         break
@@ -192,14 +191,14 @@ innodb-flush-log-at-trx-commit = 2
 wsrep_cluster_address          = 'gcomm://${DB_TIER_IPS}'
 wsrep_cluster_name             = '${GALERA_CLUSTER_NAME}'
 wsrep_node_address             = '${my_addr}'
-wsrep_node_name                = '${NODE_HOSTNAME}'
+wsrep_node_name                = '${HOSTNAME}'
 
 # MYISAM REPLICATION SUPPORT #
 wsrep_replicate_myisam         = ON
 EOF
 "
 
-if [ "${master}" == "${NODE_HOSTNAME}" ]; then
+if [ "${master}" == "${HOSTNAME}" ]; then
     # I'm the master
     echo "Master"
     echo "Initializing master..."

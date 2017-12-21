@@ -24,8 +24,7 @@ sed -i -e '57,63d' /var/www/html/web/pre_installer_code.php
 sed -i "s/80/${APP_PORT}/" /etc/httpd/conf/httpd.conf
 sed -i "s/LogFormat \"%h/LogFormat \"%a/g" /etc/httpd/conf/httpd.conf
 
-NODE_HOSTNAME = $(hostname)
-sed -i "21s%.*%${NODE_HOSTNAME}%g" /var/www/html/apps/siwapp/templates/layout.php
+sed -i "21s%.*%${HOSTNAME}%g" /var/www/html/apps/siwapp/templates/layout.php
 
 su -c "echo $'<Directory /var/www/html/web>
 	Options FollowSymLinks
