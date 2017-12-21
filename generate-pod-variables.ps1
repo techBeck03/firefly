@@ -68,7 +68,7 @@ $csvDict = @()
     }
     "APP_TIER_IPS=`"$($appIPs.Trim(','))`"" | Add-Content $variableFile
     "APP_TIER_HOSTNAMES=`"$($appNames.Trim(','))`"" | Add-Content $variableFile
-    "APP_TIER_PORT=`"8081`"" | Add-Content $variableFile
+    "APP_PORT=`"8081`"" | Add-Content $variableFile
     $target = $csvDict | where {$_.POD -eq $pod -and $_.APP_TIER -eq "db" }
     $dbNames = ""
     $dbIPs = ""
