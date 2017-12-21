@@ -23,7 +23,7 @@ $APP_TIERS."LOAD_SIM" = "siwapp-load-sim.sh"
 
 Import-Csv $csv | % {
     $target = $_
-    $deployScript = $APPTIERS[$target."APP_TIER".ToUpper()]
+    $deployScript = $APPTIERS[$target."APP_TIER".ToLower()]
     Try
     {
         $output = (Invoke-VMScript -Vm $target["VMNAME"] -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target["POD"]);curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop).ScriptOutput
