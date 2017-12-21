@@ -54,9 +54,9 @@ $csvDict = @()
         }
     }
     $variableFile = "pod_$($pod)_variables.sh"
-    "#!/bin/sh" | Out-File -Encoding "UTF8" $variableFile
+    "#!/bin/sh" | Out-File -Encoding "ASCII" $variableFile
     $target = $csvDict | where {$_.POD -eq $pod -and $_.APP_TIER -eq "haproxy-app" }
-    "HAPROXY_APP_IP=`"$($target.IP)`"" | Add-Content $variableFile
+    "HAPROXY_APP_IP=`"$($target.IP)`"" | Add-Content  $variableFile
     $target = $csvDict | where {$_.POD -eq $pod -and $_.APP_TIER -eq "haproxy-db" }
     "HAPROXY_DB_IP=`"$($target.IP)`"" | Add-Content $variableFile
     $target = $csvDict | where {$_.POD -eq $pod -and $_.APP_TIER -eq "app" }
