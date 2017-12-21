@@ -32,5 +32,3 @@ WantedBy=multi-user.target'\
 systemctl daemon-reload
 systemctl enable siwapp-simulator
 systemctl start siwapp-simulator
-
-mv ~/cliqr.repo /etc/yum.repos.d/
