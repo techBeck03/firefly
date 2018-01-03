@@ -1,0 +1,44 @@
+{
+    "configs": [
+        {
+            "vip": "192.168.118.207",
+            "backends": [
+                {
+                    "backend_port": 8081,
+                    "backend_ip": "192.168.118.201"
+                },
+                {
+                    "backend_port": 8081,
+                    "backend_ip": "192.168.118.202"
+                },
+                {
+                    "backend_port": 8081,
+                    "backend_ip": "192.168.118.203"
+                }
+            ],
+            "type": 2,
+            "name": "frontend  http_in",
+            "vip_port": 80
+        },
+        {
+            "vip": "192.168.118.208",
+            "backends": [
+                {
+                    "backend_port": 3306,
+                    "backend_ip": "192.168.118.204"
+                },
+                {
+                    "backend_port": 3306,
+                    "backend_ip": "192.168.118.205"
+                },
+                {
+                    "backend_port": 3306,
+                    "backend_ip": "192.168.118.206"
+                }
+            ],
+            "type": 2,
+            "name": "frontend  mariadb_in",
+            "vip_port": 3306
+        }
+    ]
+}
