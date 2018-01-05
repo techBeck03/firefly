@@ -24,19 +24,24 @@ $APP_TIERS."DB" = "siwapp-db.sh"
 $APP_TIERS."LOAD-SIM" = "siwapp-load-sim.sh"
 
 # Connect to vCenter
-Connect-VIServer -User $user -Password $password
+Connect-VIServer $vc -User $user -Password $password
 
 Import-Csv $csv | where {$_.POD -eq $pod} | % {
     $target = $_
-    
+    Write-Host "Starting deployment for $($target."HOSTNAME")"
     $deployScript = $APP_TIERS[$target."APP_TIER".ToLower()]
+    Write-Host "Deploy script = $deployScript"
     Try
     {
-        $vm = Get-VM -Name $target["HOSTNAME"]
-        $output = (Invoke-VMScript -Vm $vm -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target["POD"]);curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript;/usr/bin/bash /tmp/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop).ScriptOutput
+        Write-Host "Finding VM: $($target."HOSTNAME")"
+        $vm = Get-VM -Name $target."HOSTNAME"
+        Write-Host "Found VM named $vm"
+        $output = (Invoke-VMScript -Vm $vm -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target."POD");curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript;/usr/bin/bash /tmp/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop -ScriptType bash -RunAsync).ScriptOutput
+        Write-Host "Deployment complete for $($target."HOSTNAME")"
     }
     Catch
     {
-        Write-Host "Caught Exception"			
+        Write-Host "Caught Exception while configuring: $($target."HOSTNAME")"
     }
 }
+Disconnect-VIServer -Confirm:$False
