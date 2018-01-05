@@ -30,6 +30,7 @@ $APP_TIERS."LOAD-SIM" = "siwapp-load-sim.sh"
 # Connect to vCenter
 Connect-VIServer $vc -User $user -Password $password
 
+# Get entries for specified pod from assignments csv
 Import-Csv $csv | where {$_.POD -eq $pod} | % {
     $target = $_
     Write-Host "Starting deployment for $($target."HOSTNAME")"
