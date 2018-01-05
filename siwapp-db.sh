@@ -1,7 +1,8 @@
 #!/bin/bash -x
 
-curl -o /tmp/provisioningVars.sh ${FILE_SERVER}/pod_${POD}_variables.sh
-. /tmp/provisioningVars.sh
+mkdir /usr/local/siwapp
+curl -o /usr/local/siwapp/provisioningVars.sh ${FILE_SERVER}/pod_${POD}_variables.sh
+. /usr/local/siwapp/provisioningVars.sh
 
 su -c "cat <<EOF > /etc/yum.repos.d/MariaDB.repo
 [mariadb]
@@ -234,3 +235,11 @@ else
         systemctl start mariadb
     fi
 fi
+
+mkdir /usr/share/systemd/siwapp
+wget ${FILE_SERVER}/siwapp-galera-fixup.sh -P /usr/share/systemd/siwapp
+mkdir  /usr/lib/systemd/system/mariadb.service.d
+cat > /usr/lib/systemd/system/mariadb.service.d/10-siwapp-edits.conf <<EOF
+[Service]
+ExecStartPre=/usr/bin/bash /usr/share/systemd/siwapp/siwapp-galera-fixup.sh
+EOF
