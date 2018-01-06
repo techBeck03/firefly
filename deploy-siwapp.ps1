@@ -11,7 +11,9 @@ Param(
     [Parameter(Mandatory=$True)]
     [string]$rootPassword,
     [Parameter(Mandatory=$True)]
-    [string]$pod
+    [string]$pod,
+    [Parameter(Mandatory=$False)]
+    [switch]$async=$False
 )
 
 # Example Usage for pod 1 (passwords are changed)
@@ -41,7 +43,14 @@ Import-Csv $csv | where {$_.POD -eq $pod} | % {
         Write-Host "Finding VM: $($target."HOSTNAME")"
         $vm = Get-VM -Name $target."HOSTNAME"
         Write-Host "Found VM named $vm"
-        $output = (Invoke-VMScript -Vm $vm -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target."POD");curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript;/usr/bin/bash /tmp/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop -ScriptType bash -RunAsync).ScriptOutput
+        if $async
+        {
+            $output = (Invoke-VMScript -Vm $vm -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target."POD");curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript;/usr/bin/bash /tmp/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop -ScriptType bash -RunAsync).ScriptOutput
+        }
+        else
+        {
+            Invoke-VMScript -Vm $vm -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target."POD");curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript;/usr/bin/bash /tmp/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop -ScriptType bash
+        }
         Write-Host "Deployment complete for $($target."HOSTNAME")"
     }
     Catch
