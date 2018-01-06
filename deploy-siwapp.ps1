@@ -13,7 +13,7 @@ Param(
     [Parameter(Mandatory=$True)]
     [string]$pod,
     [Parameter(Mandatory=$False)]
-    [switch]$async=$False
+    [switch]$async
 )
 
 # Example Usage for pod 1 (passwords are changed)
