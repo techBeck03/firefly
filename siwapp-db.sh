@@ -17,7 +17,7 @@ rpm --import https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 groupadd -g 250 -r mysql
 useradd -u 250 -r -g mysql mysql
 yum update -y
-yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld nmap
+yum -y install MariaDB-server MariaDB-client galera less which socat pwgen firewalld nmap wget
 yum install expect -y
 yum clean all
 
