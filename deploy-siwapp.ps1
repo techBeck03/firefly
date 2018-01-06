@@ -43,7 +43,7 @@ Import-Csv $csv | where {$_.POD -eq $pod} | % {
         Write-Host "Finding VM: $($target."HOSTNAME")"
         $vm = Get-VM -Name $target."HOSTNAME"
         Write-Host "Found VM named $vm"
-        if $async
+        if ($async)
         {
             $output = (Invoke-VMScript -Vm $vm -ScriptText "export FILE_SERVER=$FILE_SERVER;export POD=$($target."POD");curl -o /tmp/$deployScript ${FILE_SERVER}/$deployScript;/usr/bin/bash /tmp/$deployScript" -GuestUser "root" -GuestPassword $rootPassword -ErrorAction Stop -ScriptType bash -RunAsync).ScriptOutput
         }
