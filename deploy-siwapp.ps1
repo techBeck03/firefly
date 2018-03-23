@@ -21,7 +21,7 @@ Param(
 # .\deploy-siwapp.ps1 -vc 192.168.11.113 -user Student1\administrator -pwd vcPassword -csv .\pod_assignments.csv -rootPassword vmRootPassword -pod 1
 
 # Global Variables
-$FILE_SERVER = "https://raw.githubusercontent.com/techBeck03/firefly/master"
+$FILE_SERVER = "https://raw.githubusercontent.com/techBeck03/firefly/master/testing"
 $APP_TIERS = @{}
 $APP_TIERS."HAPROXY-APP" = "siwapp-haproxy-app.sh"
 $APP_TIERS."APP" = "siwapp-app.sh"
