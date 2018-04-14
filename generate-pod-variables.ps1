@@ -47,7 +47,7 @@ $csvDict = @()
             else {
                 $tierDict | add-member -MemberType NoteProperty -Name "HOSTNAME" -Value "$($tier.tier)-pod-$pod"
             }
-            $tierDict | add-member -MemberType NoteProperty -Name "IP" -Value "192.168.$(120 + $pod).$(200 + $hostCount)"
+            $tierDict | add-member -MemberType NoteProperty -Name "IP" -Value "192.168.$(100 + $pod).$(200 + $hostCount)"
             $tierDict | add-member -MemberType NoteProperty -Name "POD" -Value $pod
             $tierDict | add-member -MemberType NoteProperty -Name "APP_TIER" -Value "$($tier.tier)"
             $csvDict += $tierDict
